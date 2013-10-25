@@ -19,7 +19,8 @@
 - (void)setUp	{    [super setUp];
 
 	_baseline = @"Hello world!";	_same = @"Hello world!";	_world = @"world";	_wXrld = @"wXrld";	_HW = @"HW";
-	_strings = @[_baseline, _same, _world, _wXrld, _HW];
+	_strings = @[@"world", @3, @"wXrld", @"world", @"world",@"HW", NSNull.null];
+
 }
 - (void)testSame {	[_baseline scoreAgainst:_same];
 
@@ -53,6 +54,25 @@
 	XCTAssertEqual(result6,0.646,@"");
 }
 
+- (void) testArrays {  NSString *closest;
+
+	closest = [_baseline closestMatch:_strings];
+	XCTAssertTrue([_world isEqualToString:closest],@"World should be closest");
+
+	closest = [_baseline closestMatch:[_strings arrayByAddingObject:_baseline]];
+	XCTAssertTrue([_baseline isEqualToString:closest],@"baseline is same.. should be closest");
+}
+
+- (void) testStringScoreProperty {
+
+	CGFloat same = [_baseline scoreAgainst:@"Hello world!"];
+	XCTAssertEqual(_baseline.stringScore,1.0,@"stringScore should be 1.0 if equal.");
+	XCTAssertEqual(_baseline.stringScore,same,@"score should be same as stringScore property.");
+
+	CGFloat score = [_wXrld scoreAgainst:@"Hello world!"];
+	XCTAssertEqual(_wXrld.stringScore,score,@"score should be same as stringScore property.");
+
+}
 //	NSLog(@" same.stringScore = %.3f", stringScore);
 //
 //	CGFloat   noFuzz	= [baseline scoreAgainst:wXrld],
