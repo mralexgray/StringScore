@@ -33,6 +33,25 @@
 	XCTAssertNotEqual(withFuzz, noFuzz, @"Fuzz should effect score");
 }
 
+- (void) testReadme {
+
+
+	NSString *testString = @"Hello world!";
+
+	CGFloat result1 = [testString scoreAgainst:@"Hello world!"],
+					result2 = [testString scoreAgainst:@"world"],
+					result3 = [testString scoreAgainst:@"wXrld" fuzziness:@(0.8)],
+					result4 = [testString scoreAgainst:@"world" fuzziness:nil options:NSStringScoreOptionFavorSmallerWords],
+					result5 = [testString scoreAgainst:@"world" fuzziness:nil options:NSStringScoreOptionFavorSmallerWords | NSStringScoreOptionReducedLongStringPenalty],
+					result6 = [testString scoreAgainst:@"HW"]; // abbreviation matching example
+
+	XCTAssertEqual(result1,1.000,@"");
+	XCTAssertEqual(result2,0.425,@"");
+	XCTAssertEqual(result3,0.272,@"");
+	XCTAssertEqual(result4,0.250,@"");
+	XCTAssertEqual(result5,0.425,@"");
+	XCTAssertEqual(result6,0.646,@"");
+}
 
 //	NSLog(@" same.stringScore = %.3f", stringScore);
 //
