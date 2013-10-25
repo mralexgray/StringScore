@@ -6,19 +6,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <objc/runtime.h>
 
-enum{
-    NSStringScoreOptionNone                         = 1 << 0,
-    NSStringScoreOptionFavorSmallerWords            = 1 << 1,
-    NSStringScoreOptionReducedLongStringPenalty     = 1 << 2
-};
-
-typedef NSUInteger NSStringScoreOption;
+typedef NS_ENUM (NSUInteger, NSStringScoreOption) { NSStringScoreOptionNone                     = 1 << 0,
+																										NSStringScoreOptionFavorSmallerWords        = 1 << 1,
+																										NSStringScoreOptionReducedLongStringPenalty	= 1 << 2	};
 
 @interface NSString (Score)
 
-- (CGFloat) scoreAgainst:(NSString *)otherString;
-- (CGFloat) scoreAgainst:(NSString *)otherString fuzziness:(NSNumber *)fuzziness;
-- (CGFloat) scoreAgainst:(NSString *)otherString fuzziness:(NSNumber *)fuzziness options:(NSStringScoreOption)options;
+@property CGFloat stringScore;
+- (NSString*) closestMatch:(NSArray*)inArray;
+-   (CGFloat) scoreAgainst:(NSString*)otherString;
+-   (CGFloat) scoreAgainst:(NSString*)otherString fuzziness:(NSNumber*)fuzziness;
+-   (CGFloat) scoreAgainst:(NSString*)otherString fuzziness:(NSNumber*)fuzziness options:(NSStringScoreOption)options;
 
+@end
+
+@interface NSArray (Score)
+-  (NSString*) stringClosestToString:				(NSString*)someString;
+- (NSUInteger) indexOfStringClosestToString:(NSString*)someString;
 @end
